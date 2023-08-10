@@ -1,0 +1,10 @@
+*,
+::after,
+::before {
+  font-family: fira code, Menlo, Courier;
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+
