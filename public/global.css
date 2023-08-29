@@ -37,8 +37,11 @@ nav #buttons {
   align-items: center;
   gap: 8px;
 }
-nav #buttons button {
+nav #buttons a {
   flex-grow: 1;
+}
+nav #buttons a button {
+  width: 100%;
 }
 nav h1 {
   flex-grow: 2;
@@ -70,6 +73,7 @@ nav h1:hover {
 
 main {
   flex-grow: 1;
+  padding: 16px;
 }
 
 h1 {

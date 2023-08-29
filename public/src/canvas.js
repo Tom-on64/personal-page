@@ -1,5 +1,4 @@
 /** @type {HTMLCanvasElement} */
-
 const canvas = document.getElementById("animation");
 const ctx = canvas.getContext("2d");
 
@@ -62,7 +61,7 @@ const setup = () => {
   canvas.height = 360;
 };
 
-export const start = () => {
+const start = () => {
   setup();
 
   ctx.fillStyle = "#000000";
