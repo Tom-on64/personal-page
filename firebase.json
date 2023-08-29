@@ -1,0 +1,7 @@
+{
+  "hosting": {
+    "site": "tomon",
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}

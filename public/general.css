@@ -8,12 +8,40 @@
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--primary);
   transition: all 300ms;
 }
 
 body * {
   color: var(--text);
+}
+
+nav {
+  position: sticky;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0px 4px 8px #000;
+}
+nav #buttons {
+  flex-grow: 4;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+nav #buttons button {
+  flex-grow: 1;
+}
+nav h1 {
+  flex-grow: 2;
 }
 
 .light {
@@ -32,6 +60,10 @@ body * {
   --shadow: #444;
   --accent: #00ff00;
   --text: #fff;
+}
+
+main {
+  flex-grow: 1;
 }
 
 h1 {
@@ -67,6 +99,10 @@ button {
   margin: 2px;
   box-shadow: 4px 4px var(--shadow);
   transition: all 100ms;
+}
+button:hover {
+  background-color: var(--border);
+  border-color: var(--text);
 }
 button:active {
   translate: 3px 3px;
@@ -111,4 +147,27 @@ details p {
 
 img {
   width: 32px;
+}
+
+footer {
+  padding-top: 32px;
+  padding-bottom: 32px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+footer #social {
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+footer #social a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 6px;
 }
