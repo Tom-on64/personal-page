@@ -93,7 +93,7 @@ document.getElementById("restart").onclick = () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   particles = [];
-  for (let i = 0; i < Math.floor(Math.random() * 25); i++) {
+  for (let i = 0; i < Math.floor(Math.random() * 25) + 5; i++) {
     particles.push(
       new Particle(randomPos(), randomPos(), Math.random(), Math.random())
     );
