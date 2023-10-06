@@ -155,9 +155,9 @@ details p {
   padding: 4px;
 }
 
-img {
+/* img {
   width: 32px;
-}
+} */
 
 footer {
   padding-top: 32px;
@@ -180,4 +180,14 @@ footer #social a {
   align-items: center;
   flex-grow: 1;
   padding: 6px;
+}
+footer img {
+  width: 32px;
+}
+
+@media only screen and (max-width: 500px) {
+  nav { 
+    button {font-size: 8pt;}
+    h1 {display: none;}
+  }
 }
