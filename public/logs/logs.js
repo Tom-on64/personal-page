@@ -1,9 +1,4 @@
-const logs = {
-  webdev0: {
-    title: "Website devlog #0",
-    description: "Intro to my website devlogs",
-    tag: "devlog", 
-    content: `
+const webdev0 = `
     # Website Devlog #0
     ---
     So, this is the first web devlog i'm writing, so it might not be very good, but i'll try.
@@ -20,7 +15,14 @@ const logs = {
     I want to add categories to these logs, but that's not for today. So that's it!
 
     Bye!
-    `
+`
+
+const logs = {
+  webdev0: {
+    title: "Website devlog #0",
+    description: "Intro to my website devlogs",
+    tag: "devlog", 
+    content: webdev0
   }
 };
 
