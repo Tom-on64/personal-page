@@ -67,7 +67,7 @@ const start = () => {
   ctx.fillStyle = "#000000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < Math.floor(Math.random() * 25); i++) {
+  for (let i = 0; i < Math.floor(Math.random() * 25) + 5; i++) {
     particles.push(
       new Particle(randomPos(), randomPos(), Math.random(), Math.random())
     );
