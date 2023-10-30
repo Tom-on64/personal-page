@@ -31,14 +31,13 @@ Well in general an OS is actually really simple. It is usually split into these 
 The bootloader is code that is ran by the BIOS (Basic I/O System) and it's purpose is to gather information about the computer, prepare the computer for the kernel and to load and run the kernel.
 The kernel is everything else, like handling I/O, the filesystem and more.
 
-### How does is run the OS?
+### How does it run the OS?
 When you boot your PC, the first thing that runs is the BIOS. It sets up some stuff and then looks for the bootloader.
 
 And how does it do that?
-Well, it just loops through all storage units (HDD, SSD, Optical Drives, etc.) and looks at the first sector (512 Bytes) of that unit.
-All it does, is that it checks the last two bytes of that sector and sees it they're the magic number 0x55aa.
+Well, it just loops through all the drives (HDD, SSD, Optical Drives, etc.) and looks at the last two bytes of the first sector (512 Bytes) of that drive.
+If they're the magic number 0x55aa, then the first sector (also known as the boot sector) gets loaded into memory and executed.
 Why that number? I have no clue, but it's all that's needed to make that drive bootable.
-If it finds such a drive, it will load the first sector into memory and run it.
 
 ### Bootloades
 My bootloader is written in NASM assembly and it's only 512 bytes long.
@@ -65,7 +64,7 @@ I will also make a custom filesystem and some custom drivers.
 
 Well, that's going to be it for today.
 
-If you want to write your own os, i'd recommend these resourcses:
+If you want to write your own os, i'd recommend these resources:
 [Writing a simple OS from scratch - Nick Blundell](https://www.cs.bham.ac.uk//~exr/lectures/opsys/10_11/lectures/os-dev.pdf)
 [Bran's Kernel Development Tutorials](http://www.osdever.net/bkerndev/index.php)
 [Nanobyte - Building an OS](https://youtube.com/playlist?list=PLFjM7v6KGMpiH2G-kT781ByCNC_0pKpPN&si=j-o5_xDT0dmKBSkU)
@@ -75,6 +74,71 @@ If you want to write your own os, i'd recommend these resourcses:
 And it you want to check out kern:
 [Source Code](https://github.com/Tom-on64/kern)
 `
+const neon1 = `
+# The making of Neon #1
+---
+
+In this series, i'll be documenting how my programming language - Neon is made.
+In part #1 i'll be explaining the design and the stages of making a compiler.
+
+## About Neon
+Neon is my compiled, strongly typed, multi-paradigm programming language.
+Now what do those words mean?
+
+Compiled means that when you want to run the program, you first need to compile the source code into an executable, unlike an interpreted language like Python where you just give the source code to the interpreter and it runs it without needing to make an executable.
+Now a interpreted language just seems better, right? Well for an interpreted language you need the interpreter program to run the source code, unlike a compiled language where you can just run the executable without any other program.
+
+Strongly typed means that when you declare a variable, you need to say what type it's going to be (for example an Intiger, String or Float). This usually leads to cleaner code with less bugs (usually).
+
+And lastly, Multi-paradigm just means that it supports more than one coding paradigm (style), like OOP, Functional, Procedural, etc.
+
+Neon is written in TypeScript, but once it gets good enough, i want to rewrite Neon in itself. This is known as self-hosting.
+Neons syntax is very simular to that of C, but with some aspects of JS and C#.
+
+## How does a programming language work?
+A programming language is just the text and syntax you write, the hard part is writing the compiler.
+The compiler is a program that converts the source code into an execuatble that your computer can run.
+A compiler is usually split into three parts.
+
+### 1. The Lexer
+The lexers job is to take the source code a split it up into individual tokens.
+For example:
+\`\`\`Input
+int a = 1;
+int b = 2;
+return a + b;
+\`\`\`
+Would be tokenized into these tokens:
+\`\`\`Output
+[Type:int], [Identifier:a], [Equals], [IntLit:1], [EOL], 
+[Type:int], [Identifier:b], [Equals], [IntLit:2], [EOL], 
+[Return], [Identifier:a], [Plus], [Identifier:b], [EOL], 
+[EOF]
+\`\`\`
+
+### 2. The Parser
+The parser is the most complicated part of the compiler. It's job is to take the tokens from the Lexer and make the into an AST.
+An AST (Abstract Syntax Tree) is a tree of nodes that indicate how the program should run.
+Our example tokens could become this AST:
+![neondev0_ast.png]
+
+### 3. The Generator
+The generators job is usually to navigate the AST and generate Assembly code.
+I won't be converting the example AST to assembly, because i'd have to explain too much about how we save variables and such.
+I'll make seprate articles, about Generation and all the previously mentioned parts of a compiler at some point.
+
+### 4. Assembler + Linker
+These two are usually considered a part of a compiler, but sometimes they are considered as different parts of the whole system.
+An assemblers task is to convert the generated assembly into machine code or an object file for the linker. It is sometimes skipped by generating machine code instead of assembly right away.
+The linkers job to combine multible object files and libraries (if applicable) into a single executable.
+
+## Last few words
+So yeah, that's basically how a compiler works!
+I'll be documenting the making of the Neon compiler here so stay tuned for updates.
+
+Also if you want to check out the source code of Neon (i don't reccomend it), here's the repository:
+[Tom-on64/Neon on Github](https://github.com/Tom-on64/neon)
+`
 
 const logs = {
   webdev0: {
@@ -83,12 +147,18 @@ const logs = {
     tags: ["devlog", "info", "series", "web"], 
     content: webdev0, 
   }, 
-  osdev0: {
+  osdev1: {
     title: "OS Dev #1", 
     description: "Some basic info about OS Development", 
-    tags: ["devlog", "osdev", "series"], 
+    tags: ["devlog", "osdev", "series", "tutorial"], 
     content: osdev1, 
   }, 
+  neondev1: {
+    title: "The Making Of Neon #1", 
+    description: "The first of many articles about how Neon is made", 
+    tags: ["neon", "devlog", "series"],
+    content: neon1, 
+  }
 };
 
 export default logs;

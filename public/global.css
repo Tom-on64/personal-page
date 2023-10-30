@@ -132,12 +132,11 @@ code {
   height: fit-content;
   border: 2px var(--border) solid;
   box-shadow: 4px 4px var(--shadow);
+  white-space: pre;
 
   h3 {
     padding-top: 4px;
     font-size: 1rem;
-
-
   }
 
   p {

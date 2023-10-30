@@ -35,9 +35,11 @@ const parseContent = (input) => {
             const [, language] = line.match(codeBlockStartRegex);
             output += '<code>\n';
             output += `<h3>${language}</h3>\n`;
+            output += '<p>';
             inCodeBlock = true;
         } else if (line.match(codeBlockEndRegex) && inCodeBlock) {
             // Match code block end (```)
+            output += '</p>';
             output += '</code>\n';
             inCodeBlock = false;
         } else if (line.match(imgRegex)) {
@@ -47,16 +49,7 @@ const parseContent = (input) => {
             const [, linkText, link] = line.match(linkRegex);
             const newLine = line.replace(linkRegex, `<a href="${link}">${linkText}</a>`);
             output += newLine;
-        } else {
-            // Handle normal text or code block lines
-            if (inCodeBlock) {
-                // Inside a code block, wrap the line in <p> tags
-                output += `<p>${line}</p>\n`;
-            } else {
-                // Outside a code block, treat it as plain text
-                output += `${line}\n`;
-            }
-        }
+        } else output += line;
         output += "<br />";
     }
 
