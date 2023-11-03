@@ -21,6 +21,12 @@ footer.innerHTML = `<div id="social">
 </div>`
 body.appendChild(footer);
 
+const favicon = document.createElement("link");
+favicon.rel = "shortcut icon";
+favicon.href = "/img/favicon.ico";
+favicon.type = "image/x-icon";
+document.head.appendChild(favicon);
+
 // Theme setup
 let theme = localStorage.getItem("theme");
 if (!theme) theme = "dark";

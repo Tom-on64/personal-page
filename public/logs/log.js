@@ -22,6 +22,7 @@ const parseContent = (input) => {
 
     // Iterate through each line
     for (const line of lines) {
+        let addNewline = true;
         if (line.match(headingRegex)) {
             // Match headings (H1, H2, H3)
             const [, headingSymbols, text] = line.match(headingRegex);
@@ -37,6 +38,7 @@ const parseContent = (input) => {
             output += `<h3>${language}</h3>\n`;
             output += '<p>';
             inCodeBlock = true;
+            addNewline = false;
         } else if (line.match(codeBlockEndRegex) && inCodeBlock) {
             // Match code block end (```)
             output += '</p>';
@@ -50,7 +52,7 @@ const parseContent = (input) => {
             const newLine = line.replace(linkRegex, `<a href="${link}">${linkText}</a>`);
             output += newLine;
         } else output += line;
-        output += "<br />";
+        if (addNewline) output += "<br />";
     }
 
     return output;
