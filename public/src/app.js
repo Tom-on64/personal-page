@@ -17,7 +17,7 @@ footer.innerHTML = `<div id="social">
   <a href="https://www.youtube.com/@tom-on5669/"><img src="/img/youtube.svg" alt="youtube"/></a>
   <a href="https://discord.com/invite/J4hZTEGjGY"><img src="/img/discord.svg" alt="discord"/></a>
   <a href="https://twitter.com/Tom_on1"><img src="/img/twitter.svg" alt="twitter"/></a>
-  <a href="https://www.instagram.com/tomon_64/?igshid=YmMyMTA2M2Y="><img src="/img/instagram.svg" alt="instagram"/></a>
+  <a href="https://www.instagram.com/tom_on64"><img src="/img/instagram.svg" alt="instagram"/></a>
 </div>`
 body.appendChild(footer);
 
