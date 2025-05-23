@@ -1,14 +1,4 @@
 # Personal page
 
----
+My personal website at [tomon.web.app](https://tomon.web.app).
 
-## Colors
-### Light
-Primary     - #ffffff
-Secondary   - #f9f9f9
-Accent      - #2568ed
-
-### Dark
-Primary     - #212121
-Secondary   - #1a1a1a
-Accent      - {GREEN}

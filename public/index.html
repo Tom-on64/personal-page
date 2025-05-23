@@ -1,42 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tom-on</title>
-    <link rel="stylesheet" href="/global.css" />
-    <script src="/src/app.js" defer></script>
-    <script src="src/canvas.js" defer></script>
-    <style>
-      main {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-      }
-      #window {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 8px;
-        margin: 16px;
-        border-radius: 8px;
-        width: fit-content;
-        height: fit-content;
-        background-color: var(--secondary);
-      }
-      #window canvas {
-        margin: 8px;
-        border: 2px var(--border) solid;
-      }
-    </style>
-  </head>
-  <body class="dark">
-    <div id="window">
-      <h2>Tom-on</h2>
-      <canvas id="animation"></canvas>
-      <button id="restart">Reload</button> <br />
-      <p><b>Tomas Kubecek</b>, Self-taught Developer from Czechia</p>
-    </div>
-  </body>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tom-on</title>
+	<link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<nav id="header"></nav>
+	<main id="main"></main>
+	<footer id="footer"></footer>
+	<script src="pagedef.js"></script>
+	<script src="pagegen.js"></script>
+</body>
 </html>
