@@ -1,0 +1,30 @@
+Tom-on
+======
+
+A self taught developer from Czechia
+
+I love:			I hate:
+* Open source   	* Big corporations
+* Minimalism    	* Bloated software (GNU)
+* Linux         	* Windows
+* The internet  	* The internet
+
+Projects
+--------
+kern.	  An x86 operating system with a &mu;-kernel written from scratch.
+neon	  A statically typed, C-like, compiled programming language.
+Utilities Some utilities i made to make my life easier.
+
+Languages &amp; tools
+-----------------
+I mainly write stuff in C, because i like the simplicity, freedom & low-level
+feel. I also know JavaScript quite well since it the first language i really
+learnt. And then there's C#. I don't like C#, but i'm forced to learn and use
+it in school :/
+
+Contact
+-------
+Don't.
+
+(c) Tom-on 2025 github.com youtube.com
+
