@@ -1,4 +1,4 @@
-*, ::before, ::after { box-sizing: border-box; }
+*, ::before, ::after { box-sizing: border-box; }
 * { margin: 0; }
 
 @font-face {
@@ -23,6 +23,7 @@
 	--foreground: var(--white);
 	--link:  var(--blue);
 	--linkv: var(--cyan);
+	--font-size: 16px;
 }
 
 body {
@@ -34,16 +35,39 @@ body {
 	color: var(--foreground);
 	background: var(--background);
 	font-family: BigBlueTerm, monospace;
+	font-size: var(--font-size);
+	line-height: 1;
 }
 
 main {
-	max-width: 80ch;
+	width: 80ch;
 	height: 80vh;
 	display: flex;
 	flex-direction: column;
 	gap: 1em;
-	font-size: 16px;
-	line-height: 16px;
+	word-break: break-all;
+}
+
+.prompt {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+}
+
+input {
+	height: 1em;
+	padding: 0;
+	margin: 0;
+	flex-grow: 1;
+	color: inherit;
+	background: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	border: none;
+	outline: none;
+	caret-color: var(--foreground);
+	caret-shape: underscore;
 }
 
 footer {
@@ -57,6 +81,7 @@ h1, h2 { font-size: inherit; }
 a { color: var(--link); }
 a:visited { color: var(--linkv); }
 li::marker { content: "* "; }
+.con-out { white-space: pre; }
 
 .fg_black   { color: var(--black); }
 .fg_red	    { color: var(--red); }
@@ -80,13 +105,4 @@ li::marker { content: "* "; }
 	flex-direction:	row;
 	gap: 8ch;
 }
-
-#cursor::after {
-	content: "_";
-	font-weight: bold;
-	color: var(--foreground);
-	background: none;
-	animation: blink 1s steps(2, start) infinite;
-}
-
 

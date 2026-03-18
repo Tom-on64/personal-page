@@ -5,9 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="style.css">
+	<script src="/main.js" defer></script>
 </head>
 <body>
-	<main>
+	<main id="main">
 		<header>
 			<h1 class="fg_green">Tom-on</h1>
 			<div class="underline">======</div>
@@ -64,8 +65,12 @@
 		<section>
 			<h2 class="fg_yellow">Contact</h2>
 			<div class="underline">-------</div>
-			<p class="fg_red">Don't.</span><span id="cursor"></p>
+			<p class="fg_red">Don't.</span></p>
 		</section>
+		<section id="console">
+			<div class="con-out" id="con-out"></div>
+			<p class="prompt">$&nbsp;<input id="con-in" autocomplete="off" autofocus /></p>
+		</section>		
 		<footer>
 			<p>
 				(c) Tom-on 2025
