@@ -21,7 +21,7 @@ export function cls() {
 
 const keys = {
 	"Enter": () => {
-		shell_run(gets().trim());
+		shell_run(gets());
 		con.in.value = "";
 	},
 };
