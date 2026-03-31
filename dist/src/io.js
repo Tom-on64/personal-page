@@ -1,0 +1,43 @@
+import { shell_run } from "./shell.js";
+
+const con = { in: null, out: null, main: null };
+
+export function puts(s) {
+	const line = document.createElement("p");
+	line.innerText = s;
+	con.out.appendChild(line);
+}
+
+export function gets() {
+	return con.in.value;
+}
+
+export function cls() {
+	for (const child of [...main.children]) {
+		if (child.id !== "console") child.remove();
+	}
+	con.out.innerHTML = "";
+}
+
+const keys = {
+	"Enter": () => {
+		shell_run(gets().trim());
+		con.in.value = "";
+	},
+};
+
+export function io_init(conin_id, conout_id, main_id) {
+	con.main = document.getElementById(main_id);
+	con.in = document.getElementById(conin_id),
+	con.out = document.getElementById(conout_id),
+
+	document.addEventListener("click", () => { con.in.focus(); })
+
+	con.in.addEventListener("keydown", (e) => {
+		if (!keys[e.key]) return;
+		e.preventDefault();
+		keys[e.key]();
+		window.scrollTo(0, document.body.scrollHeight);
+	})
+}
+
