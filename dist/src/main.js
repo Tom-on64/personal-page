@@ -21,7 +21,7 @@ const root = dentry("/", S.IFDIR | 0o755, 0, 0, [
 		]),
 	]),
 	dentry("root", S.IFDIR | 0o750, 0, 0, [
-
+		dentry("yeah.txt", S.IFREG | 0o664, 0, 0, "How the FUCK did you get here :)"),
 	]),
 ]);
 

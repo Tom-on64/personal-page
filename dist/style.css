@@ -63,6 +63,7 @@ input {
 	flex-grow: 1;
 	color: inherit;
 	background: inherit;
+	font-family: 'BigBlueTerm', monospace;
 	font-size: inherit;
 	line-height: inherit;
 	border: none;
@@ -105,9 +106,6 @@ li::marker { content: "* "; }
 	display: flex;
 	flex-direction:	row;
 	gap: 8ch;
-}
-
-.inline {
 }
 
 @media (max-width: 700px) {
