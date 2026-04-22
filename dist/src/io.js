@@ -20,11 +20,14 @@ export function cls() {
 }
 
 const keys = {
-	"Enter": () => {
+	"enter": () => {
 		shell_run(gets());
 		con.in.value = "";
 	},
 };
+const keys_ctrl = {
+	"l": () => shell_run("/bin/clear"),
+}
 
 export function io_init(conin_id, conout_id, main_id) {
 	con.main = document.getElementById(main_id);
@@ -34,9 +37,11 @@ export function io_init(conin_id, conout_id, main_id) {
 	document.addEventListener("click", () => { con.in.focus(); })
 
 	con.in.addEventListener("keydown", (e) => {
-		if (!keys[e.key]) return;
+		let k = keys;
+		if (e.ctrlKey) k = keys_ctrl;
+		if (!k[e.key.toLowerCase()]) return;
 		e.preventDefault();
-		keys[e.key]();
+		k[e.key.toLowerCase()]();
 		window.scrollTo(0, document.body.scrollHeight);
 	})
 }
