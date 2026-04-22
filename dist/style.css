@@ -76,6 +76,7 @@ footer {
 	display: flex;
 	flex-direction: column;
 	justify-content: end;
+	padding-top: 1em;
 	flex-grow: 1;
 }
 
