@@ -1,4 +1,5 @@
 import { P, vfs_check_perm, vfs_resolve } from "./vfs.js";
+import { history_push, history_write } from "./history.js";
 import { puts } from "./io.js";
 import ENV from "./env.js";
 
@@ -11,6 +12,9 @@ export function shell_run(input) {
 	
 	const args = raw.split(/\s+/);
 	const cmd = args[0];
+
+	history_push(raw);
+	history_write();
 
 	try {
 		let node = null;

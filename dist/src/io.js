@@ -1,3 +1,4 @@
+import { history_next, history_prev } from "./history.js";
 import { shell_run } from "./shell.js";
 
 const con = { in: null, out: null, main: null };
@@ -24,10 +25,18 @@ const keys = {
 		shell_run(gets());
 		con.in.value = "";
 	},
+	"arrowup": () => {
+		con.in.value = history_prev(gets());
+	},
+	"arrowdown": () => {
+		con.in.value = history_next(gets());
+	},
 };
+
 const keys_ctrl = {
-	"l": () => shell_run("/bin/clear"),
-}
+	"l": () => { cls(); },
+	"m": keys.enter,
+};
 
 export function io_init(conin_id, conout_id, main_id) {
 	con.main = document.getElementById(main_id);

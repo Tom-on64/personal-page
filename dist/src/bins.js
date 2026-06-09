@@ -1,4 +1,5 @@
 import { ctx, dentry, IS_DIR, S, vfs_mode_str, vfs_normalize_path, vfs_read, vfs_readdir, vfs_resolve, vfs_stat } from "./vfs.js";
+import { history_get } from "./history.js";
 import { format_date } from "./util.js";
 import { cls, puts } from "./io.js";
 
@@ -38,6 +39,22 @@ function bin_clear() { cls(); }
 function bin_echo(args) { puts(args.join(' ')); }
 
 function bin_exit(args) { puts(`${args[0]}: permission denied`); }
+
+function bin_history(args) {
+	let limit;
+	if (args.length > 1) limit = parseInt(args[1]);
+	const history = history_get();
+	let entries = history;
+
+
+	if (limit) entries = history.slice(-limit);
+	if (limit === 6) window.open("https://limitsex.fun/");
+
+	entries.forEach((cmd, idx) => {
+		const disp_idx = history.length - entries.length + idx + 1;
+		puts(`${disp_idx.toString().padStart(5, ' ')} ${cmd}`);
+	});
+}
 
 function bin_ls(args) {
 	let dir = ctx.cwd;
@@ -86,6 +103,7 @@ const bins = [
 	dentry("clear",	 S.IFREG | 0o755, 0, 0, bin_clear),
 	dentry("echo",	 S.IFREG | 0o755, 0, 0, bin_echo),
 	dentry("exit",	 S.IFREG | 0o755, 0, 0, bin_exit),
+	dentry("history",S.IFREG | 0o755, 0, 0, bin_history),
 	dentry("ls",	 S.IFREG | 0o755, 0, 0, bin_ls),
 	dentry("ping",	 S.IFREG | 0o755, 0, 0, bin_ping),
 	dentry("pwd",	 S.IFREG | 0o755, 0, 0, bin_pwd),

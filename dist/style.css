@@ -27,8 +27,7 @@
 }
 
 body {
-	width: 100vw;
-	height: 100vh;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -42,7 +41,7 @@ body {
 
 main {
 	width: 80ch;
-	min-height: 25ch;
+	min-height: 60ch;
 	max-height: 90vh;
 	display: flex;
 	flex-direction: column;
