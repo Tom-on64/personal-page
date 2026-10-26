@@ -6,7 +6,7 @@ import { cls, puts } from "./io.js";
 function bin_cat(args) {
 	if (args <= 1) {
 		puts(`${args[0]}: could not read from stdin`);
-		return;
+		return 1;
 	}
 
 	for (let i = 1; i < args.length; i++) {
@@ -31,7 +31,10 @@ function bin_cd(args) {
 		else ctx.cwd = vfs_normalize_path(dir);
 	} catch (err) {
 		puts(`${args[0]}: ${err.message}`);
+		return 1;
 	}
+
+	return 0;
 }
 
 function bin_clear() { cls(); }
@@ -48,7 +51,7 @@ function bin_history(args) {
 
 
 	if (limit) entries = history.slice(-limit);
-	if (limit === 6) window.open("https://limitsex.fun/");
+	if (limit === 6) window.open("https://limit6.eu/");
 
 	entries.forEach((cmd, idx) => {
 		const disp_idx = history.length - entries.length + idx + 1;
@@ -57,17 +60,32 @@ function bin_history(args) {
 }
 
 function bin_ls(args) {
-	let dir = ctx.cwd;
-	if (args.length > 1) dir = args[1]; // TODO: ls all specified dirs
-
-	try {
-		puts(vfs_readdir(dir).join("  "));
-	} catch (err) {
-		puts(`${args[0]}: ${err.message}`);
+	const dir_listing = function(dir) {
+		try {
+			puts(vfs_readdir(dir).join("  "));
+		} catch (err) {
+			puts(`${args[0]}: ${err.message}`);
+			return 1;
+		}
+		return 0;
+	}
+	
+	if (args.length <= 1) return dir_listing(ctx.cwd);
+	else if (args.length === 2) return dir_listing(args[1]);
+	
+	// args.length > 2
+	for (let i = 0; i < args.length; i++) {
+		puts(`${args[1]}:`);
+		dir_listing(args[i]);
+		puts("");
 	}
 }
 
 function bin_ping() { puts("pong!"); }
+
+function bin_poweroff() {
+	document.body.innerHTML = "";
+}
 
 function bin_pwd() { puts(ctx.cwd); }
 
@@ -106,6 +124,7 @@ const bins = [
 	dentry("history",S.IFREG | 0o755, 0, 0, bin_history),
 	dentry("ls",	 S.IFREG | 0o755, 0, 0, bin_ls),
 	dentry("ping",	 S.IFREG | 0o755, 0, 0, bin_ping),
+	dentry("poweroff",S.IFREG| 0o755, 0, 0, bin_poweroff),
 	dentry("pwd",	 S.IFREG | 0o755, 0, 0, bin_pwd),
 	dentry("reboot", S.IFREG | 0o755, 0, 0, bin_reboot),
 	dentry("stat",	 S.IFREG | 0o755, 0, 0, bin_stat),
