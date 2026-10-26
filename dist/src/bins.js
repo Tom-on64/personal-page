@@ -61,9 +61,13 @@ function bin_history(args) {
 }
 
 function bin_ls(args) {
+	let list_all = false;
+
 	const dir_listing = function(dir) {
 		try {
-			puts(vfs_readdir(dir).join("  "));
+			let listing = vfs_readdir(dir);
+			if (!list_all) listing = listing.filter(f => (f[0] !== '.'));
+			puts(listing.join("  "));
 		} catch (err) {
 			puts(`${args[0]}: ${err.message}`);
 			return 1;

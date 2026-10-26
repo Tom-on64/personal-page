@@ -13,11 +13,9 @@ export function open_window(html, title = "window") {
 	btns.className = "win-btns";
 
 	const fsBtn = document.createElement("button");
-	fsBtn.className = "win-btn";
 	fsBtn.textContent = "[]";
 
 	const closeBtn = document.createElement("button");
-	closeBtn.className = "win-btn";
 	closeBtn.textContent = "x";
 
 	btns.appendChild(fsBtn);
@@ -40,11 +38,13 @@ export function open_window(html, title = "window") {
 		oy = e.clientY - win.offsetTop;
 		e.preventDefault();
 	});
+
 	document.addEventListener("mousemove", (e) => {
 		if (!dragging) return;
 		win.style.left = (e.clientX - ox) + "px";
 		win.style.top = (e.clientY - oy) + "px";
 	});
+
 	document.addEventListener("mouseup", () => { dragging = false; });
 
 	closeBtn.addEventListener("click", () => win.remove());

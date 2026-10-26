@@ -140,11 +140,7 @@ li::marker { content: "* "; }
 	user-select: none;
 }
 
-.win-title { }
-
-.win-btns { }
-
-.win-btn {
+.win-bar button {
 	background: transparent;
 	color: var(--white);
 	border: none;
@@ -166,3 +162,4 @@ li::marker { content: "* "; }
 	height: 100vh !important;
 	resize: none !important;
 }
+
