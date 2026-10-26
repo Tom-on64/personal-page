@@ -3,6 +3,7 @@ import { history_get } from "./history.js";
 import { format_date } from "./util.js";
 import { cls, puts } from "./io.js";
 import { open_window } from "./window.js";
+import { getopt } from "./getopt.js";
 
 function bin_cat(args) {
 	if (args <= 1) {
@@ -62,28 +63,86 @@ function bin_history(args) {
 
 function bin_ls(args) {
 	let list_all = false;
+	let long = false;
 
-	const dir_listing = function(dir) {
+	const { options, operands } = getopt(args.slice(1), "alhrtR1");
+	list_all = options.some(o => o.opt === "a");
+	long = options.some(o => o.opt === "l");
+	const human = options.some(o => o.opt === "h");
+	const reverse = options.some(o => o.opt === "r");
+	const by_time = options.some(o => o.opt === "t");
+	const recursive = options.some(o => o.opt === "R");
+	const one = options.some(o => o.opt === "1");
+
+	const human_size = (n) => {
+		if (!human) return String(n);
+		const units = ["B", "K", "M", "G"];
+		let i = 0, v = n;
+		while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+		return `${v.toFixed(1)}${units[i]}`;
+	};
+
+	const stat_for = (dir, f) => vfs_stat(`${dir}/${f}`.replace("//", "/"));
+
+	const dir_listing = function(dir, prefix = "") {
 		try {
 			let listing = vfs_readdir(dir);
-			if (!list_all) listing = listing.filter(f => (f[0] !== '.'));
-			puts(listing.join("  "));
+			if (!list_all) listing = listing.filter(f => (f[0] !== '.'));
+
+			const entries = listing.map(f => {
+				let info = null;
+				try { info = stat_for(dir, f); } catch (e) {}
+				return { name: f, info };
+			});
+
+			if (by_time) entries.sort((a, b) => (b.info?.mtime - a.info?.mtime) || a.name.localeCompare(b.name));
+			else entries.sort((a, b) => a.name.localeCompare(b.name));
+			if (reverse) entries.reverse();
+
+			if (recursive) {
+				puts(`${dir}:`);
+			}
+
+			if (long) {
+				entries.forEach(e => {
+					const info = e.info;
+					if (!info) { puts(`${e.name}`); return; }
+					puts(`${vfs_mode_str(info.mode)}  ${human_size(info.size).padStart(6, ' ')}  ${e.name}`);
+				});
+			} else if (one) {
+				entries.forEach(e => puts(e.name));
+			} else {
+				puts(entries.map(e => e.name).join("  "));
+			}
+
+			if (recursive) {
+				for (const e of entries) {
+					const full = `${dir}/${e.name}`.replace("//", "/");
+					try {
+						if (IS_DIR(vfs_resolve(full).node)) {
+							puts("");
+							dir_listing(full);
+						}
+					} catch (err) {}
+				}
+			}
 		} catch (err) {
 			puts(`${args[0]}: ${err.message}`);
 			return 1;
 		}
 		return 0;
-	}
-	
-	if (args.length <= 1) return dir_listing(ctx.cwd);
-	else if (args.length === 2) return dir_listing(args[1]);
-	
-	// args.length > 2
-	for (let i = 0; i < args.length; i++) {
-		puts(`${args[1]}:`);
-		dir_listing(args[i]);
-		puts("");
-	}
+	};
+
+	if (operands.length === 0) return dir_listing(ctx.cwd);
+	if (operands.length === 1) return dir_listing(operands[0]);
+
+	let rc = 0;
+	operands.forEach((d, i) => {
+		puts(`${d}:`);
+		rc |= dir_listing(d);
+		if (i < operands.length - 1) puts("");
+	});
+	return rc;
 }
 
 function bin_ping() { puts("pong!"); }
