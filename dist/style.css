@@ -11,6 +11,7 @@
 }
 
 :root {
+	color-scheme: dark;
 	--black:   #000;
 	--red:     #c00;
 	--green:   #0c0;
@@ -102,6 +103,8 @@ li::marker { content: "* "; }
 .bg_magenta { background: var(--magenta); }
 .bg_cyan    { background: var(--cyan); }
 .bg_white   { background: var(--white); }
+
+.hover:hover { background: var(--white); }
 
 .sidebyside {
 	display: flex;
