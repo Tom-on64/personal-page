@@ -113,22 +113,27 @@ function bin_stat(args) {
 	}
 }
 
+function bin_stercus() {
+	
+}
+
 function bin_sh(args) { puts(`${args[0]}: could not start nested session`); }
 
 const bins = [
-	dentry("cat",	 S.IFREG | 0o755, 0, 0, bin_cat),
-	dentry("cd",	 S.IFREG | 0o755, 0, 0, bin_cd),
-	dentry("clear",	 S.IFREG | 0o755, 0, 0, bin_clear),
-	dentry("echo",	 S.IFREG | 0o755, 0, 0, bin_echo),
-	dentry("exit",	 S.IFREG | 0o755, 0, 0, bin_exit),
-	dentry("history",S.IFREG | 0o755, 0, 0, bin_history),
-	dentry("ls",	 S.IFREG | 0o755, 0, 0, bin_ls),
-	dentry("ping",	 S.IFREG | 0o755, 0, 0, bin_ping),
-	dentry("poweroff",S.IFREG| 0o755, 0, 0, bin_poweroff),
-	dentry("pwd",	 S.IFREG | 0o755, 0, 0, bin_pwd),
-	dentry("reboot", S.IFREG | 0o755, 0, 0, bin_reboot),
-	dentry("stat",	 S.IFREG | 0o755, 0, 0, bin_stat),
-	dentry("sh",	 S.IFREG | 0o755, 0, 0, bin_sh),
+	dentry("cat",	   S.IFREG | 0o755, 0, 0, bin_cat),
+	dentry("cd",	   S.IFREG | 0o755, 0, 0, bin_cd),
+	dentry("clear",	   S.IFREG | 0o755, 0, 0, bin_clear),
+	dentry("echo",	   S.IFREG | 0o755, 0, 0, bin_echo),
+	dentry("exit",	   S.IFREG | 0o755, 0, 0, bin_exit),
+	dentry("history",  S.IFREG | 0o755, 0, 0, bin_history),
+	dentry("ls",	   S.IFREG | 0o755, 0, 0, bin_ls),
+	dentry("ping",	   S.IFREG | 0o755, 0, 0, bin_ping),
+	dentry("poweroff", S.IFREG | 0o755, 0, 0, bin_poweroff),
+	dentry("pwd",	   S.IFREG | 0o755, 0, 0, bin_pwd),
+	dentry("reboot",   S.IFREG | 0o755, 0, 0, bin_reboot),
+	dentry("stat",	   S.IFREG | 0o755, 0, 0, bin_stat),
+	dentry("stercus",  S.IFREG | 0o755, 0, 0, bin_stercus),
+	dentry("sh",	   S.IFREG | 0o755, 0, 0, bin_sh),
 ];
 
 export default bins;

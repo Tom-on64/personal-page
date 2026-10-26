@@ -11,6 +11,12 @@ export function shell_run(input) {
 	if (!raw) return;
 	
 	const args = raw.split(/\s+/);
+	for (let i = 0; i < args.length; i++) {
+		if (args[i][0] === '~') {
+			args[i] = args[i].replace(/^~(?=\/|$)/, ENV.HOME);
+		}
+	}
+
 	const cmd = args[0];
 
 	history_push(raw);

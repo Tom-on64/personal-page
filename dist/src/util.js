@@ -1,8 +1,3 @@
-/*
- * Miscelaneous utilities
- * (c) Tom-on 2026
- */
-
 export function format_date(date) {
 	const pad = (n) => n.toString().padStart(2, '0');
 

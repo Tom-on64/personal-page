@@ -9,7 +9,7 @@ export function history_get() {
 	return history;
 }
 
-export function history_read(path = `${ENV.HOME}/.history`) {
+export function history_read(path = `${ENV.HISTFILE}`) {
 	let hist_file;
 
 	try {
@@ -24,7 +24,7 @@ export function history_read(path = `${ENV.HOME}/.history`) {
 }
 
 
-export function history_write(path = `${ENV.HOME}/.history`) {
+export function history_write(path = `${ENV.HISTFILE}`) {
 	vfs_write(path, history.join('\n'), true);
 } 
 

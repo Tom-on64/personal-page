@@ -1,8 +1,3 @@
-/*
- * Simple VFS implementation 
- * (c) Tom-on 2026
- */
-
 // TODO: Move this somewhere
 export const ctx = {
 	uid: 1000,
@@ -69,7 +64,7 @@ export function vfs_mode_str(mode) {
 	case S.IFSOCK:	str += 's'; break;
 	default:	str += '?'; break;
 	}
-
+	
 	for (let i = 0; i < 3; i++) {
 		const p = mode >> (3 * i) & 7;
 
@@ -177,7 +172,7 @@ export function vfs_creat(path) {
 	const parent = vfs_resolve(parent_path).node;
 	if (!vfs_check_perm(parent, P.WRITE)) throw new Error("EACCESS: permission denied");
 
-	node = dentry(filename, S_IFREG | 0o644, ctx.uid, ctx.gid, "");
+	let node = dentry(filename, S.IFREG | 0o644, ctx.uid, ctx.gid, "");
 	parent.data.push(node);
 
 	return { node, parent };
