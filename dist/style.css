@@ -114,3 +114,55 @@ li::marker { content: "* "; }
 	.sidebyside { gap: 4ch; }
 }
 
+
+.win {
+	position: fixed;
+	left: 80px;
+	top: 80px;
+	width: 640px;
+	height: 480px;
+	background: var(--black);
+	border: 1px solid var(--white);
+	display: flex;
+	flex-direction: column;
+	z-index: 1000;
+	resize: both;
+	overflow: hidden;
+}
+
+.win-bar {
+	cursor: move;
+	padding: 2px 4px;
+	background: #333;
+	color: var(--white);
+	display: flex;
+	justify-content: space-between;
+	user-select: none;
+}
+
+.win-title { }
+
+.win-btns { }
+
+.win-btn {
+	background: transparent;
+	color: var(--white);
+	border: none;
+	cursor: pointer;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+.win-frame {
+	flex: 1;
+	border: none;
+	width: 100%;
+}
+
+.win-fullscreen {
+	left: 0 !important;
+	top: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	resize: none !important;
+}

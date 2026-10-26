@@ -2,6 +2,7 @@ import { ctx, dentry, IS_DIR, S, vfs_mode_str, vfs_normalize_path, vfs_read, vfs
 import { history_get } from "./history.js";
 import { format_date } from "./util.js";
 import { cls, puts } from "./io.js";
+import { open_window } from "./window.js";
 
 function bin_cat(args) {
 	if (args <= 1) {
@@ -114,7 +115,8 @@ function bin_stat(args) {
 }
 
 function bin_stercus() {
-	
+	const app = `<iframe src="https://jh.prihradka.cz/?embed" style="border:none;width:100%;height:100vh;"></iframe>`
+	open_window(app, "stercus");
 }
 
 function bin_sh(args) { puts(`${args[0]}: could not start nested session`); }
