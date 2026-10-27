@@ -1,4 +1,4 @@
-import { S, vfs_init, dentry, vfs_read, vfs_write } from "./vfs.js";
+import { S, P, vfs_init, dentry, vfs_read, vfs_write } from "./vfs.js";
 import { history_read } from "./history.js";
 import { io_init, puts } from "./io.js";
 import bins from "./bins.js";
@@ -20,7 +20,9 @@ const file_runme = () => {
 }
 
 const root = dentry("/", S.IFDIR | 0o755, 0, 0, [
-	dentry("bin", S.IFDIR | 0o777, 0, 0, bins),
+	dentry("bin", S.IFDIR | 0o755, 0, 0, bins),
+	dentry("boot", S.IFDIR | 0o700, 0, 0, []),
+	dentry("dev", S.IFDIR | 0o755, 0, 0, []),
 	dentry("etc", S.IFDIR | 0o755, 0, 0, [
 		dentry("group", S.IFREG | 0o644, 0, 0, file_group),
 		dentry("passwd", S.IFREG | 0o644, 0, 0, file_passwd),
@@ -39,9 +41,11 @@ const root = dentry("/", S.IFDIR | 0o755, 0, 0, [
 			dentry("runme", S.IFREG | 0o755, 1000, 1000, file_runme),
 		]),
 	]),
+	// dentry("lib", S.IFDIR | 0o777, 0, 0, []),
 	dentry("root", S.IFDIR | 0o750, 0, 0, [
 		dentry("yeah.txt", S.IFREG | 0o664, 0, 0, "How the FUCK did you get here?!?"),
 	]),
+	dentry("tmp", S.IFDIR | 0o777 | P.STICKY, 0, 0, []),
 ]);
 
 async function main() {

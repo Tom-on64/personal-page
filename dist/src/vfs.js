@@ -146,6 +146,16 @@ export function vfs_stat(path) {
 	};
 }
 
+export function vfs_exists(path) {
+	try {
+		vfs_resolve(path);
+
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
 export function vfs_read(path) {
 	const { node } = vfs_resolve(path);
 

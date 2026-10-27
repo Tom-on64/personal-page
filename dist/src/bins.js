@@ -1,6 +1,6 @@
-import { ctx, dentry, IS_DIR, S, vfs_mode_str, vfs_normalize_path, vfs_read, vfs_readdir, vfs_resolve, vfs_stat } from "./vfs.js";
+import { ctx, dentry, IS_DIR, S, vfs_exists, vfs_mkdir, vfs_mode_str, vfs_normalize_path, vfs_read, vfs_readdir, vfs_resolve, vfs_stat } from "./vfs.js";
 import { history_get } from "./history.js";
-import { format_date } from "./util.js";
+import { format_date, human_size } from "./util.js";
 import { cls, puts } from "./io.js";
 import { open_window } from "./window.js";
 import { getopt } from "./getopt.js";
@@ -62,36 +62,23 @@ function bin_history(args) {
 }
 
 function bin_ls(args) {
-	let list_all = false;
-	let long = false;
-
 	const { options, operands } = getopt(args.slice(1), "alhrtR1");
-	list_all = options.some(o => o.opt === "a");
-	long = options.some(o => o.opt === "l");
-	const human = options.some(o => o.opt === "h");
-	const reverse = options.some(o => o.opt === "r");
-	const by_time = options.some(o => o.opt === "t");
-	const recursive = options.some(o => o.opt === "R");
-	const one = options.some(o => o.opt === "1");
+	const list_all = options.some(o => (o.opt === "a"));
+	const long = options.some(o => (o.opt === "l"));
+	const human = options.some(o => (o.opt === "h"));
+	const reverse = options.some(o => (o.opt === "r"));
+	const by_time = options.some(o => (o.opt === "t"));
+	const recursive = options.some(o => (o.opt === "R"));
+	const one = options.some(o => (o.opt === "1"));
 
-	const human_size = (n) => {
-		if (!human) return String(n);
-		const units = ["B", "K", "M", "G"];
-		let i = 0, v = n;
-		while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
-		return `${v.toFixed(1)}${units[i]}`;
-	};
-
-	const stat_for = (dir, f) => vfs_stat(`${dir}/${f}`.replace("//", "/"));
-
-	const dir_listing = function(dir, prefix = "") {
+	const dir_listing = function(dir) {
 		try {
 			let listing = vfs_readdir(dir);
 			if (!list_all) listing = listing.filter(f => (f[0] !== '.'));
 
 			const entries = listing.map(f => {
 				let info = null;
-				try { info = stat_for(dir, f); } catch (e) {}
+				try { info = vfs_stat(`${dir}/${f}`); } catch (e) {}
 				return { name: f, info };
 			});
 
@@ -99,32 +86,27 @@ function bin_ls(args) {
 			else entries.sort((a, b) => a.name.localeCompare(b.name));
 			if (reverse) entries.reverse();
 
-			if (recursive) {
-				puts(`${dir}:`);
-			}
+			if (recursive) puts(`${dir}:`);
 
 			if (long) {
 				entries.forEach(e => {
 					const info = e.info;
 					if (!info) { puts(`${e.name}`); return; }
-					puts(`${vfs_mode_str(info.mode)}  ${human_size(info.size).padStart(6, ' ')}  ${e.name}`);
+					const hsize = human ? human_size(info.size) : String(info.size);
+					puts(`${vfs_mode_str(info.mode)}  ${hsize.padStart(6, ' ')}  ${e.name}`);
 				});
-			} else if (one) {
-				entries.forEach(e => puts(e.name));
-			} else {
-				puts(entries.map(e => e.name).join("  "));
-			}
+			} else if (one) entries.forEach(e => puts(e.name));
+			else puts(entries.map(e => e.name).join("  "));
 
-			if (recursive) {
-				for (const e of entries) {
-					const full = `${dir}/${e.name}`.replace("//", "/");
-					try {
-						if (IS_DIR(vfs_resolve(full).node)) {
-							puts("");
-							dir_listing(full);
-						}
-					} catch (err) {}
-				}
+			if (!recursive) return 0;
+
+			for (const e of entries) {
+				const full = `${dir}/${e.name}`.replace("//", "/");
+				try {
+					if (!IS_DIR(vfs_resolve(full).node)) continue;
+					puts("");
+					dir_listing(full);
+				} catch (err) {}
 			}
 		} catch (err) {
 			puts(`${args[0]}: ${err.message}`);
@@ -137,12 +119,47 @@ function bin_ls(args) {
 	if (operands.length === 1) return dir_listing(operands[0]);
 
 	let rc = 0;
-	operands.forEach((d, i) => {
-		puts(`${d}:`);
-		rc |= dir_listing(d);
+	for (let i = 0; i < operands.length; i++) {
+		puts(`${operands[i]}:`);
+		rc |= dir_listing(operands[i]);
 		if (i < operands.length - 1) puts("");
-	});
+	}
 	return rc;
+}
+
+// TODO:
+function bin_mkdih() { puts("dih."); }
+
+function bin_mkdir(args) {
+	const { options, operands } = getopt(args.slice(1), "m:pv");
+	const mode_idx = options.findIndex(o => (o.opt === 'm'));
+	const parent = options.some(o => (o.opt === 'p'));
+	const verbose = options.some(o => (o.opt === 'v'));
+
+	if (operands.length < 1) {
+		puts(`${args[0]}: missing operand`);
+		return 1;
+	}
+
+	let mode = 0o755;
+	if (mode_idx !== -1) mode = parseInt(options[mode_idx].arg, 8); 
+	for (let i = 0; i < operands.length; i++) {
+		try {
+			if (!parent) { 
+				vfs_mkdir(operands[i], mode);
+				continue;
+			}
+
+			const parts = vfs_normalize_path(operands[i]).split('/');
+			let cur = "";
+			for (const part of parts) {
+				cur += "/" + part;
+				if (vfs_exists(cur)) continue;
+				vfs_mkdir(cur, mode);
+			}
+			if (verbose) puts(`${args[0]}: created directory ${operands[i]}`);
+		} catch (err) { puts(`${args[0]}: ${err.message}`); }
+	}
 }
 
 function bin_ping() { puts("pong!"); }
@@ -157,7 +174,7 @@ function bin_reboot() { location.reload(); }
 
 function bin_stat(args) {
 	if (args.length <= 1) {
-		puts(`${args[0]}: missing opperand`);
+		puts(`${args[0]}: missing operand`);
 		return;
 	}
 
@@ -192,6 +209,8 @@ const bins = [
 	dentry("exit",	   S.IFREG | 0o755, 0, 0, bin_exit),
 	dentry("history",  S.IFREG | 0o755, 0, 0, bin_history),
 	dentry("ls",	   S.IFREG | 0o755, 0, 0, bin_ls),
+	dentry("mkdih",	   S.IFREG | 0o755, 0, 0, bin_mkdih),
+	dentry("mkdir",	   S.IFREG | 0o755, 0, 0, bin_mkdir),
 	dentry("ping",	   S.IFREG | 0o755, 0, 0, bin_ping),
 	dentry("poweroff", S.IFREG | 0o755, 0, 0, bin_poweroff),
 	dentry("pwd",	   S.IFREG | 0o755, 0, 0, bin_pwd),
