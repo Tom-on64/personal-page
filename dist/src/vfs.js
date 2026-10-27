@@ -65,7 +65,7 @@ export function vfs_mode_str(mode) {
 	default:	str += '?'; break;
 	}
 	
-	for (let i = 0; i < 3; i++) {
+	for (let i = 2; i >= 0; i--) {
 		const p = mode >> (3 * i) & 7;
 
 		if (p & P.READ) str += 'r';
@@ -176,6 +176,54 @@ export function vfs_creat(path) {
 	parent.data.push(node);
 
 	return { node, parent };
+}
+
+export function vfs_mkdir(path, mode = 0o775) {
+	const parts = vfs_normalize_path(path).split('/');
+	const dirname = parts.pop();
+	const parent_path = parts.join('/') || '/';
+
+	const parent = vfs_resolve(parent_path).node;
+	if (!IS_DIR(parent)) throw new Error("ENOTDIR: not a directory");
+	if (!vfs_check_perm(parent, P.WRITE)) throw new Error("EACCESS: permission denied");
+	if (parent.data.some(d => d.name === dirname)) throw new Error("EEXIST: file exists");
+
+	parent.data.push(dentry(dirname, S.IFDIR | mode, ctx.uid, ctx.gid, []));
+}
+
+export function vfs_rm(path, recursive = false) {
+	const { node, parent } = vfs_resolve(path);
+
+	if (!parent) throw new Error("EINVAL: cannot remove root");
+	if (IS_DIR(node) && node.data.length && !recursive) throw new Error("ENOTEMPTY: directory not empty");
+
+	const idx = parent.data.indexOf(node);
+	if (idx !== -1) parent.data.splice(idx, 1);
+}
+
+export function vfs_cp(src, dst) {
+	const { node: s } = vfs_resolve(src);
+	if (IS_DIR(s)) throw new Error("EISDIR: is a directory");
+
+	const data = s.data;
+	let resolved;
+	try { resolved = vfs_resolve(dst); } catch (e) { resolved = null; }
+
+	if (!resolved) {
+		vfs_write(dst, data, true);
+		return;
+	}
+
+	if (IS_DIR(resolved.node)) {
+		vfs_write(`${dst}/${s.name}`.replace("//", "/"), data, true);
+	} else {
+		vfs_write(dst, data);
+	}
+}
+
+export function vfs_mv(src, dst) {
+	vfs_cp(src, dst);
+	vfs_rm(src);
 }
 
 export function vfs_write(path, data, creat = false) {
